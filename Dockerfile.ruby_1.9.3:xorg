@@ -1,0 +1,17 @@
+# Nginx
+#
+# VERSION               0.0.1
+#
+FROM      ubuntu
+MAINTAINER Cajun "zac@kleinpeter.org"
+RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
+RUN apt-get update
+RUN apt-get install -y wget build-essential openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison nodejs subversion
+
+RUN wget ftp://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p448.tar.gz; tar xvfz ruby-1.9.3-p448.tar.gz
+RUN cd /ruby-1.9.3-p448; ./configure && make && make install
+RUN gem update --system --no-rdoc --no-ri; gem install bundler --no-rdoc --no-ri
+
+RUN apt-get install -y xorg
+
+RUN apt-get clean
