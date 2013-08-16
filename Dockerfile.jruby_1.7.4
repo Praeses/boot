@@ -1,0 +1,38 @@
+#DOCKER-VERSION 0.3.4
+FROM    ubuntu
+
+RUN	echo "deb-src http://us.archive.ubuntu.com/ubuntu/ precise main" >> /etc/apt/sources.list
+RUN	echo "deb http://us.archive.ubuntu.com/ubuntu/ precise universe" >> /etc/apt/sources.list
+RUN	apt-get update
+
+RUN apt-get install -y openssl wget
+
+#Install Node
+RUN wget http://nodejs.org/dist/v0.10.15/node-v0.10.15-linux-x64.tar.gz
+RUN tar -xf node-v0.10.15-linux-x64.tar.gz
+RUN ln node-v0.10.15-linux-x64/bin/node /bin/node
+RUN ln node-v0.10.15-linux-x64/bin/npm /bin/npm
+RUN rm node-v0.10.15-linux-x64.tar.gz
+
+#Install jruby
+RUN wget http://jruby.org.s3.amazonaws.com/downloads/1.7.4/jruby-bin-1.7.4.tar.gz
+RUN tar -xf jruby-bin-1.7.4.tar.gz
+RUN ln -s /jruby-1.7.4/bin/* /bin/
+RUN rm jruby-bin-1.7.4.tar.gz
+
+#Install java
+RUN apt-get install -y openjdk-7-jre-headless
+RUN apt-get clean
+
+#App setup
+RUN gem install bundler
+RUN cd /bin; ln -s /jruby-1.7.4/bin/bundle
+
+RUN apt-get install postgresql-client -y
+RUN apt-get install git -y
+
+EXPOSE 3000
+
+
+
+
