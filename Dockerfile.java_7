@@ -1,0 +1,14 @@
+#DOCKER-VERSION 0.3.4
+FROM    ubuntu
+
+RUN	echo "deb-src http://us.archive.ubuntu.com/ubuntu/ precise main" >> /etc/apt/sources.list
+RUN	echo "deb http://us.archive.ubuntu.com/ubuntu/ precise universe" >> /etc/apt/sources.list
+RUN	apt-get update
+
+RUN apt-get install -y openssl wget
+
+#Install java
+RUN apt-get install -y openjdk-7-jre-headless
+RUN apt-get clean
+
+
