@@ -12,5 +12,5 @@ RUN wget ftp://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p448.tar.gz; tar xvfz r
 RUN cd /ruby-1.9.3-p448; ./configure && make && make install
 RUN gem update --system --no-rdoc --no-ri; gem install bundler --no-rdoc --no-ri
 
-RUN apt-get freetds-dev
+RUN apt-get -y install freetds-dev
 RUN apt-get clean
