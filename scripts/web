@@ -1,0 +1,40 @@
+#!/bin/bash
+
+ME=$(basename $0)
+APP="`basename $PWD`"
+CONTAINER='praeses/ruby_1.9.3:xorg'
+REMOTE_VOLUMN='/www'
+VOLUMNS="-v $PWD:$REMOTE_VOLUMN"
+PORT=5000
+START_COMMAND="cd $REMOTE_VOLUMN && ./bin/unicorn -p $PORT -c ./config/unicorn.rb"
+OPTIONS="-d -p $PORT"
+
+source $PWD/script/common
+source $PWD/script/common.rails
+
+case "$1" in
+  start)
+    if [[ -z $RUNNING ]]
+    then
+      # This will run the generic start script
+      $PWD/script/web conf
+      echo "Reloading nginx"
+      sudo nginx -s reload
+    fi
+    ;;
+
+  conf)
+    DOMAIN="`echo $PWD`.dev"
+    cmd="sed -e 's;%APP%;$APP;'
+    -e 's;%PWD%;$PWD;' \
+      -e 's;%PORT%;$PUBLIC_PORT;' \
+      -e 's;%DOMAINS%;$DOMAIN;' \
+      -e 's;%ALLOW%;
+          allow 192.168.102.0/24\;\n
+          allow 192.168.101.0/24\;\n
+          allow 192.168.100.0/24\;\n;' \
+      $PWD/config/nginx.template.conf > $PWD/config/nginx.conf"
+    echo $cmd
+    eval $cmd
+  ;;
+esac

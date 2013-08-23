@@ -1,0 +1,38 @@
+#!/bin/bash
+
+GB=2
+ME=$(basename $0)
+APP="Mongodb"
+CONTAINER='praeses/mongodb_2.4.5'
+REMOTE_VOLUMN="/data/db"
+VOLUMNS="-v $PWD/.data/mongo:$REMOTE_VOLUMN"
+PORT=27017
+START_COMMAND="mongod"
+EXTRA="-d -p $PORT"
+
+source $PWD/script/common
+
+case "$1" in
+  restore)
+    REMOTE_VOLUMN="/backup"
+    VOLUMNS="-v $2:$REMOTE_VOLUMN"
+    START_COMMAND="mongorestore --drop --host $IP -d $3 $REMOTE_VOLUMN"
+    run
+  ;;
+  console)
+    START_COMMAND="mongo --host $IP"
+    run_interactive
+  ;;
+  start)
+    if [[ -z $RUNNING ]]
+    then
+      $PWD/script/mongo env
+    fi
+    ;;
+  env)
+    HOST=$($PWD/script/mongo ip)
+    PORT=$($PWD/script/mongo port)
+    sed -i "s/\(MONGOHOST=\).*/\1$HOST/g" $PWD/.env
+    sed -i "s/\(MONGOPORT=\).*/\1$PORT/g" $PWD/.env
+  ;;
+esac

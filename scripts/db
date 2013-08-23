@@ -1,0 +1,17 @@
+#!/bin/bash
+
+case "$1" in
+  start)
+    $PWD/script/mongo start
+    ;;
+  stop)
+    $PWD/script/mongo stop
+    ;;
+  restart)
+    $PWD/script/db stop
+    $PWD/script/db start
+    ;;
+  status)
+    $PWD/script/mongo status
+    ;;
+esac

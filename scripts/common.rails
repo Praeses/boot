@@ -1,0 +1,16 @@
+#!/bin/bash
+
+source $PWD/script/common.ruby
+
+case "$1" in
+  rails)
+    START_COMMAND="/bin/bash -c 'cd $REMOTE_VOLUMN && ./bin/rails ${@:2}'"
+    run_interactive
+  ;;
+  assets)
+    $PWD/script/rake assets:clean assets:precompile
+  ;;
+  console)
+    $PWD/script/$ME rails console
+  ;;
+esac
