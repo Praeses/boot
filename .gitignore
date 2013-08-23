@@ -1,0 +1,9 @@
+.bundle/
+.data
+.env
+.gems
+config
+log
+public
+tmp
+
