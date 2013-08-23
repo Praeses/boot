@@ -4,6 +4,11 @@ set -u
 mkdir -p ./tmp/pids
 PID_FILE="./tmp/pids/$ME.pid"
 
+function setNetorkVars {
+  IP=$(docker inspect $PID | awk /IPAddress/'{print $2}' | grep -Eo '([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})')
+  PUBLIC_PORT=$(docker port $PID $PORT)
+}
+
 function run_interactive {
   OPTIONS="-i -t"
   run
@@ -25,22 +30,24 @@ fi
 
 DNS_IP=$(cat /etc/resolv.conf | awk /192/'{print $2}' | head -1)
 DNS="-dns $DNS_IP"
-if [[ -z $RUNNING ]]
+
+if [[ -n $RUNNING ]]
 then
-  IP=$(docker inspect $PID | awk /IPAddress/'{print $2}' | grep -Eo '([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})')
-  PUBLIC_PORT=$(docker port $PID $PORT)
+  setNetorkVars
 fi
 
+VOLUMNS=${VOLUMNS:=''}
 GB=${GB:=0}
 
 if [ $GB -ne 0 ]
 then
-  echo "Running at $GB Gib"
   MB=$(echo "$GB * 1024" | bc)
+  mem="$GB Gib"
 else
   MB=${MB:=512}
-  echo "Running at $MB Meg"
+  mem="$MB Meg"
 fi
+
 
 
 B=$(echo "$MB * 1024 * 1024" | bc)
@@ -50,12 +57,15 @@ case "$1" in
   start)
     if [[ -z $RUNNING ]]
     then
-      echo "Starting $APP"
+      echo "Starting $APP @ $mem"
       run
       echo $PID
       echo $PID > $PID_FILE
+      setNetorkVars
+
+      echo "Running on $IP:$PUBLIC_PORT"
     else
-      echo "Starting $APP is already running"
+      echo "Starting $APP is already running @ $mem"
     fi
     echo "$APP running on port `$PWD/boot/$ME port`"
     ;;

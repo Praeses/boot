@@ -8,7 +8,7 @@ REMOTE_VOLUMN="/data/db"
 VOLUMNS="-v $PWD/.data/mongo:$REMOTE_VOLUMN"
 PORT=27017
 START_COMMAND="mongod"
-EXTRA="-d -p $PORT"
+OPTIONS="-d -p $PORT"
 
 source $PWD/boot/common
 

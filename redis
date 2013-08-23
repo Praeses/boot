@@ -6,7 +6,7 @@ APP="Redis-Server"
 CONTAINER='praeses/redis_2.2.12'
 PORT=6379
 START_COMMAND="redis-server"
-EXTRA="-d -p $PORT"
+OPTIONS="-d -p $PORT"
 
 source $PWD/boot/common
 

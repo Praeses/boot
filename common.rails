@@ -3,14 +3,14 @@
 source $PWD/boot/common.ruby
 
 function updateNginx {
-    cmd="sed -e 's;%APP%;$APP;'
-    -e 's;%PWD%;$PWD;' \
-      -e 's;%PORT%;$PUBLIC_PORT;' \
-      -e 's;%DOMAINS%;$DOMAIN;' \
-      -e 's;%ALLOW%;
-          allow 192.168.102.0/24\;\n
-          allow 192.168.101.0/24\;\n
-          allow 192.168.100.0/24\;\n;' \
+    cmd="sed -e 's:%APP%:$APP:g'
+    -e 's:%PWD%:$PWD:g' \
+      -e 's:%PORT%:$PUBLIC_PORT:g' \
+      -e 's:%DOMAINS%:$DOMAIN:g' \
+      -e 's:%ALLOW%:
+          allow 192.168.102.0/24;\n
+          allow 192.168.101.0/24;\n
+          allow 192.168.100.0/24;\n:g' \
       $PWD/config/nginx.template.conf > $PWD/config/nginx.conf"
     echo $cmd
     eval $cmd
