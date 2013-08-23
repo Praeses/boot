@@ -1,0 +1,11 @@
+.bundle
+.data
+.gems
+.env
+bin
+log
+public
+tmp
+config
+dockerfiles
+
