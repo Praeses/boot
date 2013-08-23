@@ -10,7 +10,7 @@ PORT=27017
 START_COMMAND="mongod"
 EXTRA="-d -p $PORT"
 
-source $PWD/script/common
+source $PWD/boot/common
 
 case "$1" in
   restore)
@@ -24,15 +24,10 @@ case "$1" in
     run_interactive
   ;;
   start)
-    if [[ -z $RUNNING ]]
-    then
-      $PWD/script/mongo env
-    fi
-    ;;
+    $PWD/boot/mongo env
+  ;;
   env)
-    HOST=$($PWD/script/mongo ip)
-    PORT=$($PWD/script/mongo port)
-    sed -i "s/\(MONGOHOST=\).*/\1$HOST/g" $PWD/.env
+    sed -i "s/\(MONGOHOST=\).*/\1$IP/g" $PWD/.env
     sed -i "s/\(MONGOPORT=\).*/\1$PORT/g" $PWD/.env
   ;;
 esac

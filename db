@@ -2,16 +2,16 @@
 
 case "$1" in
   start)
-    $PWD/script/mongo start
+    $PWD/boot/mongo start
     ;;
   stop)
-    $PWD/script/mongo stop
+    $PWD/boot/mongo stop
     ;;
   restart)
-    $PWD/script/db stop
-    $PWD/script/db start
+    $PWD/boot/db stop
+    $PWD/boot/db start
     ;;
   status)
-    $PWD/script/mongo status
+    $PWD/boot/mongo status
     ;;
 esac

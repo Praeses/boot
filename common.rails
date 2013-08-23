@@ -1,16 +1,39 @@
 #!/bin/bash
 
-source $PWD/script/common.ruby
+source $PWD/boot/common.ruby
 
+function updateNginx {
+    cmd="sed -e 's;%APP%;$APP;'
+    -e 's;%PWD%;$PWD;' \
+      -e 's;%PORT%;$PUBLIC_PORT;' \
+      -e 's;%DOMAINS%;$DOMAIN;' \
+      -e 's;%ALLOW%;
+          allow 192.168.102.0/24\;\n
+          allow 192.168.101.0/24\;\n
+          allow 192.168.100.0/24\;\n;' \
+      $PWD/config/nginx.template.conf > $PWD/config/nginx.conf"
+    echo $cmd
+    eval $cmd
+
+}
 case "$1" in
   rails)
     START_COMMAND="/bin/bash -c 'cd $REMOTE_VOLUMN && ./bin/rails ${@:2}'"
     run_interactive
   ;;
   assets)
-    $PWD/script/rake assets:clean assets:precompile
+    $PWD/boot/rake assets:clean assets:precompile
   ;;
   console)
-    $PWD/script/$ME rails console
+    $PWD/boot/$ME rails console
+  ;;
+  start)
+    # This will run the generic start boot
+    updateNginx
+    echo "Reloading nginx"
+    sudo nginx -s reload
+  ;;
+  conf)
+    updateNginx
   ;;
 esac

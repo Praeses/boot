@@ -1,74 +1,25 @@
 #!/bin/bash
 
-set -u
-
-mkdir -p ./tmp/pids
-PID_FILE='./tmp/pids/db.redis'
-touch $PID_FILE
-
-MB=256
-B=$(echo "$MB * 1024 * 1024" | bc)
-
+MB=128
+ME=$(basename $0)
+APP="Redis-Server"
 CONTAINER='praeses/redis_2.2.12'
-VOLUMNS=''
-#LIMITS="-c 1 -m $B"
-LIMITS=""
-DNS="-dns `$PWD/script/app dns`"
+PORT=6379
+START_COMMAND="redis-server"
+EXTRA="-d -p $PORT"
 
-PID=$(cat $PID_FILE)
-RUNNING=''
-if [[ -n $PID ]]
-then
-  RUNNING=$(docker ps -q | grep $PID)
-fi
+source $PWD/boot/common
 
 case "$1" in
-  ip)
-    docker inspect $PID | awk /IPAddress/'{print $2}' | grep -Eo '([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})'
-  ;;
-  port)
-    docker port $PID 6379
-  ;;
   console)
-    echo "Connecting to `$PWD/script/redis ip`"
-    docker run -i -t $LIMITS $DNS $CONTAINER redis-cli -h `$PWD/script/redis ip`
-  ;;
-  status)
-    docker ps | grep $PID
+    START_COMMAND="redis-cli -h $IP"
+    run_interactive
   ;;
   start)
-
-    if [[ -z $RUNNING ]]
-    then
-      echo "Starting Redis..."
-      echo "docker run -p 6379 -d  $LIMITS $DNS $CONTAINER redis-server"
-      PID=$(docker run -p 6379 -d  $LIMITS $DNS $CONTAINER redis-server)
-      echo $PID > $PID_FILE
-      cat $PID_FILE
-      PORT=$(docker port $PID 6379)
-      echo "...Redis running on port $PORT"
-      $PWD/script/redis env
-    else
-      echo "Redis Already Running"
-      PORT=$(docker port $PID 6379)
-      echo "Redis running on port $PORT"
-    fi
-    ;;
-  stop)
-    echo "Stopping database"
-    docker stop $PID
-    echo "Database stopped"
-    ;;
-  restart)
-    echo "Restarting database"
-    $PWD/script/db stop
-    $PWD/script/db start
-    echo "App running on port"
+    $PWD/boot/redis env
     ;;
   env)
-    HOST=$($PWD/script/redis ip)
-    PORT=$($PWD/script/redis port)
-    sed -i "s/\(REDISHOST=\).*/\1$HOST/g" $PWD/.env
+    sed -i "s/\(REDISHOST=\).*/\1$IP/g" $PWD/.env
     sed -i "s/\(REDISPORT=\).*/\1$PORT/g" $PWD/.env
     ;;
 esac

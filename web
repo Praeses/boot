@@ -1,0 +1,14 @@
+#!/bin/bash
+
+ME=$(basename $0)
+APP="`basename $PWD`"
+CONTAINER='praeses/ruby_1.9.3:xorg'
+REMOTE_VOLUMN='/www'
+VOLUMNS="-v $PWD:$REMOTE_VOLUMN"
+PORT=5000
+START_COMMAND="cd $REMOTE_VOLUMN && ./bin/unicorn -p $PORT -c ./config/unicorn.rb"
+OPTIONS="-d -p $PORT"
+DOMAIN="`echo $PWD`.dev"
+
+source $PWD/boot/common
+source $PWD/boot/common.rails

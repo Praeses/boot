@@ -57,7 +57,7 @@ case "$1" in
     else
       echo "Starting $APP is already running"
     fi
-    echo "$APP running on port `$PWD/script/$ME port`"
+    echo "$APP running on port `$PWD/boot/$ME port`"
     ;;
   stop)
     echo "Stopping $APP"
@@ -67,8 +67,8 @@ case "$1" in
 
   restart)
     echo "Restarting $APP"
-    $PWD/script/$ME stop
-    $PWD/script/$ME start
+    $PWD/boot/$ME stop
+    $PWD/boot/$ME start
   ;;
 
   logs)
