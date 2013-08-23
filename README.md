@@ -1,7 +1,7 @@
 dockerfiles
 ===========
 
-listing of docker images that we use.
+Listing of docker images that we use.
 
 
 Example Usage
