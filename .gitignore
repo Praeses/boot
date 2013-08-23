@@ -1,11 +1,9 @@
-.bundle
+.bundle/
 .data
-.gems
 .env
-bin
+.gems
+config
 log
 public
 tmp
-config
-dockerfiles
 
