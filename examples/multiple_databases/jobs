@@ -1,0 +1,35 @@
+#!/bin/bash
+
+ME=$(basename $0)
+APP="`basename $PWD` JOBS"
+CONTAINER='praeses/ruby_1.9.3:xorg'
+REMOTE_VOLUMN='/www'
+VOLUMNS="-v $PWD:$REMOTE_VOLUMN"
+START_COMMAND="/bin/bash -c 'cd /www && ./bin/rake resque:work QUEUE=*'"
+OPTIONS="-d"
+DOMAIN="`echo $APP`.dev"
+
+source $PWD/boot/common/base
+
+INSTANCES=2
+
+case "$1" in
+  start)
+    if [[ -z $RUNNING ]]
+    then
+      echo "Starting $APP"
+
+      for instance in {1..$INSTANCES}
+      do
+        echo "Starting $APP @ $mem"
+        run
+        echo $PID
+        echo $PID >> $PID_FILE
+      done
+
+    else
+      echo "Starting $APP is already running"
+      echo "$APP running on port `$PWD/script/jobs port`"
+    fi
+    ;;
+esac

@@ -3,18 +3,24 @@
 case "$1" in
   start)
     $PWD/boot/db start
+    $PWD/boot/jobs start
+    $PWD/boot/clock start
     $PWD/boot/web start
     ;;
   stop)
     $PWD/boot/web stop
+    $PWD/boot/jobs stop
+    $PWD/boot/clock stop
     ;;
   restart)
-    $PWD/boot/web stop
-
-    $PWD/boot/web start
+    $PWD/boot/web restart
+    $PWD/boot/jobs restart
+    $PWD/boot/clock restart
     ;;
   status)
     $PWD/boot/web status
+    $PWD/boot/jobs status
+    $PWD/boot/clock status
     $PWD/boot/db status
     ;;
   force_stop)

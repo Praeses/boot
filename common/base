@@ -3,10 +3,15 @@
 set -u
 mkdir -p ./tmp/pids
 PID_FILE="./tmp/pids/$ME.pid"
+PORT=${PORT:=''}
+PUBLIC_PORT=${PUBLIC_PORT:=''}
 
 function setNetorkVars {
   IP=$(docker inspect $PID | awk /IPAddress/'{print $2}' | grep -Eo '([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})')
-  PUBLIC_PORT=$(docker port $PID $PORT)
+  if [[ -n $PORT ]]
+  then
+    PUBLIC_PORT=$(docker port $PID $PORT)
+  fi
 }
 
 function run_interactive {
@@ -25,7 +30,10 @@ PID=$(cat $PID_FILE)
 RUNNING=''
 if [[ -n $PID ]]
 then
-  RUNNING=$(docker ps -q | grep $PID)
+  for x in $PID
+  do
+    RUNNING=$(docker ps -q | grep $x)
+  done
 fi
 
 DNS_IP=$(cat /etc/resolv.conf | awk /192/'{print $2}' | head -1)
@@ -82,23 +90,42 @@ case "$1" in
   ;;
 
   logs)
-    docker logs $PID
+    for x in $PID
+    do
+      docker logs $x
+    done
   ;;
 
   attach)
-    docker attach $PID
+    for x in $PID
+    do
+      docker attach $x
+      break
+    done
   ;;
 
   status)
-    docker ps | grep $PID
+    for x in $PID
+    do
+      docker ps | grep $x
+    done
   ;;
 
   ip)
-    docker inspect $PID | awk /IPAddress/'{print $2}' | grep -Eo '([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})'
+    for x in $PID
+    do
+      docker inspect $x | awk /IPAddress/'{print $2}' | grep -Eo '([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})'
+    done
   ;;
 
   port)
-    docker port $PID $PORT
+    if [[ -n $PORT ]]
+    then
+      for x in $PID
+      do
+        docker port $PID $PORT
+      done
+    fi
   ;;
 
   bash)

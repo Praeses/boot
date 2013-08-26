@@ -1,0 +1,12 @@
+#!/bin/bash
+
+ME=$(basename $0)
+APP="`basename $PWD` Clockwork"
+CONTAINER='praeses/ruby_1.9.3'
+REMOTE_VOLUMN='/www'
+VOLUMNS="-v $PWD:$REMOTE_VOLUMN"
+PORT=9000
+START_COMMAND="/bin/bash -c 'cd /www && ./bin/clockwork ./config/clock.rb'"
+
+source $PWD/boot/common/base
+source $PWD/boot/common/ruby

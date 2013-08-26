@@ -1,9 +1,17 @@
-.bundle/
-.data
-.env
-.gems
-config
-log
-public
-tmp
+/.bundle/
+/.data
+/.env
+/.gems
+/config
+/log
+/public
+/tmp
 
+
+/app
+/clock
+/db
+/web
+/mongo
+/jobs
+/redis
