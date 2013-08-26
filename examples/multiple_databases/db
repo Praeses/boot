@@ -3,15 +3,18 @@
 case "$1" in
   start)
     $PWD/boot/mongo start
+    $PWD/boot/redis start
     ;;
   stop)
     $PWD/boot/mongo stop
+    $PWD/boot/redis stop
     ;;
   restart)
-    $PWD/boot/db stop
-    $PWD/boot/db start
+    $PWD/boot/mongo restart
+    $PWD/boot/redis restart
     ;;
   status)
     $PWD/boot/mongo status
+    $PWD/boot/redis status
     ;;
 esac

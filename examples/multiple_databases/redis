@@ -8,7 +8,7 @@ PORT=6379
 START_COMMAND="redis-server"
 OPTIONS="-d -p $PORT"
 
-source $PWD/boot/common
+source $PWD/boot/common/base
 
 case "$1" in
   console)

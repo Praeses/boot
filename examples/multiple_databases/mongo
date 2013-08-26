@@ -10,7 +10,7 @@ PORT=27017
 START_COMMAND="mongod"
 OPTIONS="-d -p $PORT"
 
-source $PWD/boot/common
+source $PWD/boot/common/base
 
 case "$1" in
   restore)

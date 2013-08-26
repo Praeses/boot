@@ -10,5 +10,5 @@ START_COMMAND="/bin/bash -c 'cd $REMOTE_VOLUMN && ./bin/unicorn -p $PORT -c ./co
 OPTIONS="-d -p $PORT"
 DOMAIN="`echo $APP`.dev"
 
-source $PWD/boot/common
-source $PWD/boot/common.rails
+source $PWD/boot/common/base
+source $PWD/boot/common/rails

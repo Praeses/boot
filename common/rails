@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source $PWD/boot/common.ruby
+source $PWD/boot/common/ruby
 
 function updateNginx {
     cmd="sed -e 's:%APP%:$APP:g'
