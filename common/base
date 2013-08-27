@@ -21,8 +21,13 @@ function run_interactive {
 
 function run {
   echo "Running command..."
-  cmd="docker run $OPTIONS $LIMITS $DNS $VOLUMNS $CONTAINER $START_COMMAND"
+  tmpFile=$(mktemp)
+  cmd="docker run  $OPTIONS $LIMITS $DNS $VOLUMNS $CONTAINER $START_COMMAND"
+  tput smul
+  echo ''
   echo $cmd
+  echo ''
+  tput rmul
   PID=$(eval $cmd)
 }
 
@@ -63,6 +68,7 @@ LIMITS="-m $B"
 
 case "$1" in
   start)
+    tput setf 2
     if [[ -z $RUNNING ]]
     then
       echo "Starting $APP @ $mem"
@@ -76,14 +82,17 @@ case "$1" in
       echo "Starting $APP is already running @ $mem"
     fi
     echo "$APP running on port `$PWD/boot/$ME port`"
-    ;;
+  ;;
+
   stop)
+    tput setf 4
     echo "Stopping $APP"
     docker stop $PID
     echo "$APP stopped"
   ;;
 
   restart)
+    tput setf 6
     echo "Restarting $APP"
     $PWD/boot/$ME stop
     $PWD/boot/$ME start
@@ -111,6 +120,13 @@ case "$1" in
     done
   ;;
 
+  top)
+    for x in $PID
+    do
+      docker top $x
+    done
+  ;;
+
   ip)
     for x in $PID
     do
@@ -132,5 +148,4 @@ case "$1" in
     START_COMMAND="/bin/bash"
     run_interactive
   ;;
-
 esac

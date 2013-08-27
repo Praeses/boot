@@ -12,7 +12,11 @@ function updateNginx {
           allow 192.168.101.0/24;\n
           allow 192.168.100.0/24;\n:g' \
       $PWD/config/nginx.template.conf > $PWD/config/nginx.conf"
+    tput smul
+    echo ""
     echo $cmd
+    echo ""
+    tput rmul
     eval $cmd
 
 }
