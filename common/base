@@ -1,10 +1,11 @@
 #!/bin/bash
 
 set -u
-mkdir -p ./tmp/pids
-PID_FILE="./tmp/pids/$ME.pid"
+mkdir -p $PWD/tmp/pids
+PID_FILE="$PWD/tmp/pids/$ME.pid"
 PORT=${PORT:=''}
 PUBLIC_PORT=${PUBLIC_PORT:=''}
+OPTIONS=${OPTIONS:='-d'}
 
 function setNetorkVars {
   IP=$(docker inspect $PID | awk /IPAddress/'{print $2}' | grep -Eo '([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})')
@@ -21,14 +22,25 @@ function run_interactive {
 
 function run {
   echo "Running command..."
-  tmpFile=$(mktemp)
-  cmd="docker run  $OPTIONS $LIMITS $DNS $VOLUMNS $CONTAINER $START_COMMAND"
+  tmpFile=$(mktemp docker.pid.XXXXXXX)
+  rm $tmpFile # just need randomness
+
+  if [ -e $PWD/tmp/pids/docker.pid.* ]
+  then
+    rm $PWD/tmp/pids/docker.pid.* # Docker won't run if this file exists
+  fi
+
+  cmd="docker run -cidfile $PWD/tmp/pids/$tmpFile  $OPTIONS $LIMITS $DNS $VOLUMNS $CONTAINER $START_COMMAND"
+
   tput smul
   echo ''
   echo $cmd
   echo ''
   tput rmul
-  PID=$(eval $cmd)
+
+  eval $cmd
+  PID=$(cat $PWD/tmp/pids/$tmpFile)
+  rm $PWD/tmp/pids/$tmpFile # Docker won't run if this file exists
 }
 
 PID=$(cat $PID_FILE)
@@ -49,6 +61,7 @@ then
   setNetorkVars
 fi
 
+INSTANCES=${INSTANCES:=1}
 VOLUMNS=${VOLUMNS:=''}
 GB=${GB:=0}
 
@@ -71,24 +84,32 @@ case "$1" in
     tput setf 2
     if [[ -z $RUNNING ]]
     then
-      echo "Starting $APP @ $mem"
-      run
-      echo $PID
-      echo $PID > $PID_FILE
-      setNetorkVars
+      tput setf 2
+      echo "Starting $INSTANCES instances of $APP"
+      for instance in $(seq 1 $INSTANCES)
+      do
+        echo "Starting $APP.$instance @ $mem"
+        run
+        echo "PID IS $PID"
+        echo $PID >> $PID_FILE
+        setNetorkVars
+        echo "Running on $IP:$PUBLIC_PORT"
+      done
 
-      echo "Running on $IP:$PUBLIC_PORT"
     else
       echo "Starting $APP is already running @ $mem"
     fi
-    echo "$APP running on port `$PWD/boot/$ME port`"
   ;;
 
   stop)
-    tput setf 4
-    echo "Stopping $APP"
-    docker stop $PID
-    echo "$APP stopped"
+    if [[ -n $PID ]]
+    then
+      tput setf 4
+      echo "Stopping $APP"
+      docker stop $PID
+      echo '' > $PID_FILE
+      echo "$APP stopped"
+    fi
   ;;
 
   restart)
@@ -139,7 +160,7 @@ case "$1" in
     then
       for x in $PID
       do
-        docker port $PID $PORT
+        docker port $x $PORT
       done
     fi
   ;;
