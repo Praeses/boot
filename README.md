@@ -7,6 +7,7 @@ Listing of docker images that we use.
 Example Usage
 
 ```Batchfile
+docker build -t praeses/golang_1.0.3 - < Dockerfile.golang_1.0.3
 docker build -t praeses/ruby_1.9.3 - < Dockerfile.ruby_1.9.3
 docker build -t praeses/ruby_1.9.3:xorg - < Dockerfile.ruby_1.9.3:xorg
 docker build -t praeses/ruby_1.9.3:free_tds - < Dockerfile.ruby_1.9.3:free_tds
