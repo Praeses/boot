@@ -10,4 +10,6 @@ RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt
 RUN apt-get update
 RUN apt-get install -y python-software-properties
 RUN apt-get install -y redis-server
+
+RUN apt-get upgrade -y
 EXPOSE 6379
