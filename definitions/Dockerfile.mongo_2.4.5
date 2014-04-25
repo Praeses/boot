@@ -3,14 +3,13 @@
 FROM      ubuntu:latest
 MAINTAINER Cajun "zac@kleinpeter.org"
 #
-RUN echo "hi"
-RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
+#RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
 RUN echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | tee /etc/apt/sources.list.d/mongodb.list
 
-RUN apt-get update
-RUN apt-get upgrade -y
+#RUN apt-get update
+#RUN apt-get upgrade -y
 RUN apt-get install -y mongodb-org
 EXPOSE 27017
 
-RUN apt-get clean; apt-get autoclean; apt-get autoremove
+#RUN apt-get clean; apt-get autoclean; apt-get autoremove
