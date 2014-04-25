@@ -3,7 +3,7 @@
 FROM      ubuntu
 MAINTAINER Cajun "zac@kleinpeter.org"
 #
-
+RUN echo "hi"
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
 
