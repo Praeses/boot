@@ -14,12 +14,12 @@ RUN apt-get update
 RUN apt-get install -y wget
 
 #Fix for heartbleet
-RUN wget http://security.ubuntu.com/ubuntu/pool/main/o/openssl/openssl_1.0.1-4ubuntu5.12_amd64.deb
-RUN wget http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.0.0_1.0.1-4ubuntu5.12_amd64.deb
-RUN wget http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl-dev_1.0.1-4ubuntu5.12_amd64.deb
-RUN dpkg -i libssl1.0.0_1.0.1-4ubuntu5.12_amd64.deb openssl_1.0.1-4ubuntu5.12_amd64.deb
-RUN apt-get -y install zlib1g-dev
-RUN dpkg -i libssl-dev_1.0.1-4ubuntu5.12_amd64.deb
+#RUN wget http://security.ubuntu.com/ubuntu/pool/main/o/openssl/openssl_1.0.1-4ubuntu5.12_amd64.deb
+#RUN wget http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.0.0_1.0.1-4ubuntu5.12_amd64.deb
+#RUN wget http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl-dev_1.0.1-4ubuntu5.12_amd64.deb
+#RUN dpkg -i libssl1.0.0_1.0.1-4ubuntu5.12_amd64.deb openssl_1.0.1-4ubuntu5.12_amd64.deb
+#RUN apt-get -y install zlib1g-dev
+#RUN dpkg -i libssl-dev_1.0.1-4ubuntu5.12_amd64.deb
 
 
 RUN apt-get install -y wget build-essential libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison subversion
