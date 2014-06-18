@@ -7,7 +7,7 @@ MAINTAINER Cajun "zac@kleinpeter.org"
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise main multiverse" > /etc/apt/sources.list
 RUN apt-get update
-RUN apt-get install -y python-software-properties python g++ make
+RUN apt-get install -y python-software-properties python build-essential
 RUN apt-get update
 RUN apt-get install -y wget
 
